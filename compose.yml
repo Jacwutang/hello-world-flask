@@ -6,6 +6,7 @@ services:
       - "5001:5001"
     environment:
       FLASK_ENV: development
+      PYTHONUNBUFFERED: 1
     depends_on:
       - redis
 
