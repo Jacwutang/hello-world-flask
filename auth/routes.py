@@ -1,29 +1,23 @@
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from flask import current_app
+from flask import current_app, Blueprint, redirect, url_for
+from user import user1
 
-# Login manager setup
-login_manager = LoginManager()
-login_manager.init_app(current_app)
+auth_routes = Blueprint('auth_routes', __name__)
 
-
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.get(user_id)
+@auth_routes.route('/')
+def hello():
+    return "Hellooo"
 
 
-# # Route to log in a user
-# @current_app.route('/login')
-# def login():
-#     login_user(user1)
-   
-#     print("After login: ", dict(session))  # Print session data for debugging
-#     return (f"User {current_user.username} logged in")
+# Route to log in a user
+@auth_routes.route('/login')
+def login():
+    login_user(user1)
+    return (f"User {current_user.username} logged in")
 
 # # Route to log out a user
-# @current_app.route('/logout')
-# @login_required
-# def logout():
-#     print("Before logout: ", dict(session))  # Debug session before logout
-#     logout_user()
-#     print("After logout: ", dict(session))  # Debug session after logout
-#     return redirect(url_for('login'))
+@auth_routes.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('auth_routes.login'))
