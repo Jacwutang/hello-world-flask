@@ -1,7 +1,7 @@
 from flask import Flask, session
 from flask_session import Session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from auth.routes import auth_routes
+from auth import auth_routes
 from user import user1
 import redis
 
