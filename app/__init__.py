@@ -1,8 +1,9 @@
 from flask import Flask, session
 from flask_session import Session
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager
 from auth import auth_routes
-from user import user1
+from user.model import test_user
+from db import db
 import redis
 
 def create_app():
@@ -11,13 +12,13 @@ def create_app():
     # #Register blueprints
     app.register_blueprint(auth_routes)
 
-    # Initialize login manager
+    #Initialize login manager
     login_manager = LoginManager()
     login_manager.init_app(app)
 
     @login_manager.user_loader
     def load_user(user_id):
-        return user1
+        return test_user
     
 
     # Configure the Flask app to use Redis for session management
@@ -29,6 +30,11 @@ def create_app():
 
     # Connect to Redis server
     app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379)
+
+    # DB connection
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
+    
+    db.init_app(app)
 
     # Initialize the Flask-Session extension
     Session(app)

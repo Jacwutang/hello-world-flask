@@ -22,3 +22,7 @@ build/
 # PyInstaller
 #  Usually these files are written by a Python script from a template
 #  before PyInstaller builds the exe, so
+
+
+# SqlAlchemy autogen
+instance/

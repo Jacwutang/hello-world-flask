@@ -3,7 +3,7 @@ services:
   flask-app:
     build: .
     volumes:
-      - "./:/hello-world-flask"
+      - "./:/hello-world-flask" # Bind Mount
     ports:
       - "5001:5001"
     environment:
