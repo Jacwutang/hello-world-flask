@@ -2,7 +2,7 @@ from flask import Flask, session
 from flask_session import Session
 from flask_login import LoginManager
 from auth import auth_routes
-from user.model import test_user
+from user.query import find_user_by_id
 from db import db
 import redis
 
@@ -18,7 +18,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        return test_user
+        return find_user_by_id(user_id)
     
 
     # Configure the Flask app to use Redis for session management

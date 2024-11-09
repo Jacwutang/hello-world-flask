@@ -1,17 +1,13 @@
 from app import create_app
 from db import db 
-from user.model import User
+from user.query import create_user
 
 app = create_app()
 
 with app.app_context():
+    db.drop_all()
     db.create_all()
-
-# Define the teardown function to delete all tables and records
-@app.teardown_appcontext
-def teardown_database(exception=None):
-    db.drop_all()  # Drops all tables and deletes all records
-    db.session.remove()  # Close the session to avoid leaks
+    create_user("admin", "password")
 
 # Run the Flask app
 if __name__ == '__main__':
