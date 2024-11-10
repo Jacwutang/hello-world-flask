@@ -13,5 +13,4 @@ class User(db.Model, UserMixin):
         return (f"<User(id={self.id}, username='{self.username}', "
                 f"is_authenticated={self.is_authenticated}, is_active={self.is_active})>, is_anonymous={self.is_anonymous} ")
 
-# test_user =  User(id=1, username="admin", password="password")
 

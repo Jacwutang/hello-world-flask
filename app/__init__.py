@@ -28,6 +28,7 @@ def create_app():
     app.config['SESSION_USE_SIGNER'] = True  # Sign the session cookie for security
     app.config['SESSION_KEY_PREFIX'] = 'flask-session:'  # Prefix for session keys in Redis
 
+    
     # Connect to Redis server
     app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379)
 
