@@ -1,18 +1,40 @@
-version: '3'
+version: '2.1'
 services:
   flask-app:
     build: .
     volumes:
-      - "./:/hello-world-flask" # Bind Mount
+      - "./:/hello-world-flask"  # Bind Mount
     ports:
       - "5001:5001"
     environment:
       FLASK_ENV: development
-      PYTHONUNBUFFERED: 1
     depends_on:
-      - redis
-
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    
   redis:
     image: redis:alpine
     ports:
       - "6379:6379"
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_DATABASE: mydatabase
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  mysql_data:
