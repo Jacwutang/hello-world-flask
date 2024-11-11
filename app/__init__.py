@@ -5,6 +5,7 @@ from auth import auth_routes
 from user.query import find_user_by_id
 from db import db
 import redis
+import os
 
 def create_app():
     app = Flask(__name__)
@@ -28,10 +29,12 @@ def create_app():
     app.config['SESSION_USE_SIGNER'] = True  # Sign the session cookie for security
     app.config['SESSION_KEY_PREFIX'] = 'flask-session:'  # Prefix for session keys in Redis
 
-    
-    # Connect to Redis server
-    app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379)
 
+    # Connect to Redis server
+    if os.getenv("FLASK_ENV") != "development":
+        app.config['SESSION_REDIS'] = redis.StrictRedis(host='session-cache-ab3pso.serverless.use1.cache.amazonaws.com', port=6379)
+    else:
+        app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379)
     # DB connection
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
     
