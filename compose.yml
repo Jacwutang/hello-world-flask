@@ -15,12 +15,12 @@ services:
         condition: service_started
     
   redis:
-    image: redis:alpine
+    image: public.ecr.aws/docker/library/redis:alpine
     ports:
       - "6379:6379"
 
   mysql:
-    image: mysql:8.0
+    image: public.ecr.aws/docker/library/mysql:8.0
     restart: always
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
