@@ -16,7 +16,7 @@ def login():
         user = find_user(username, password)
         if user:
             print("FOUND USER:", user)
-            #login_user(user)
+            login_user(user)
             return (f"User {current_user.username} logged in")
         else:
             return redirect(url_for('auth_routes.login'))
