@@ -32,7 +32,7 @@ def create_app():
 
     # Connect to Redis server and DB connection
     if os.getenv("FLASK_ENV") != "development":
-        app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis-ab3pso.serverless.use1.cache.amazonaws.com', port=6379)
+        app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis-ab3pso.serverless.use1.cache.amazonaws.com', port=6379, ssl=True)
         app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:[H_%}6|3K_8es>ly_tdmMVX6uw|r@mysql.c74suywgmlyf.us-east-1.rds.amazonaws.com:3306/mydatabase'
     else:
         app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379)
