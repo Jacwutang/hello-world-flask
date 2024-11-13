@@ -4,6 +4,7 @@ services:
     build: .
     volumes:
       - "./:/hello-world-flask"  # Bind Mount
+      - "~/.aws:/root/.aws"
     ports:
       - "5001:5001"
     environment:

@@ -8,9 +8,33 @@ import redis
 import os
 import logging
 import sys
+import boto3
+import json
+from botocore.exceptions import ClientError
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+
+def get_db_credentials(secret_name, region_name="us-east-1"):
+    # Create a Secrets Manager client
+    client = boto3.client("secretsmanager", region_name=region_name)
+    
+    try:
+        # Get the secret value
+        response = client.get_secret_value(SecretId=secret_name)
+        print("aws response:", response)
+        # Parse and return the secret
+        if "SecretString" in response:
+            secret = response["SecretString"]
+            return json.loads(secret)
+        else:
+            raise ValueError("SecretString not found in response")
+    except ClientError as e:
+        print(f"Error retrieving secret: {e}")
+        raise e
+
+secret_name = "rds!db-4d451755-c8f4-4cac-9b5e-3c349a03cccc"
+credentials = get_db_credentials(secret_name)
 
 def create_app():
     logger.info("Initializing App")
@@ -39,8 +63,9 @@ def create_app():
 
     # Connect to Redis server and DB connection
     if os.getenv("FLASK_ENV") != "development":
-        app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis-ab3pso.serverless.use1.cache.amazonaws.com', port=6379, ssl=True)
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:[H_%}6|3K_8es>ly_tdmMVX6uw|r@mysql.c74suywgmlyf.us-east-1.rds.amazonaws.com:3306/mydatabase'
+        app.config['SESSION_REDIS']  = redis.StrictRedis(host='redis-ab3pso.serverless.use1.cache.amazonaws.com', port=6379, ssl=True)
+        app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{credentials['username']}:{credentials['password']}@mysql.c74suywgmlyf.us-east-1.rds.amazonaws.com:3306/mydatabase"
+        #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:[H_%}6|3K_8es>ly_tdmMVX6uw|r@mysql.c74suywgmlyf.us-east-1.rds.amazonaws.com:3306/mydatabase'
     else:
         app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379)
         app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@mysql:3306/mydatabase'
