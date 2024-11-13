@@ -1,0 +1,8 @@
+flask
+flask-login
+flask-session
+redis
+Flask-SQLAlchemy
+pymysql
+cryptography
+boto3
