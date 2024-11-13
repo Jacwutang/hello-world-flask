@@ -4,7 +4,8 @@ from user.query import find_user
 from user.model import User
 from db import db
 from . import auth_routes
-
+import logging
+logger = logging.getLogger(__name__)
 
 # Route to log in a user
 @auth_routes.route('/login', methods=['GET', 'POST'])
@@ -15,8 +16,9 @@ def login():
         
         user = find_user(username, password)
         if user:
-            print("FOUND USER:", user)
+            logger.info(f"Found User {user}")
             login_user(user)
+            logger.info("User logged in")
             return (f"User {current_user.username} logged in")
         else:
             return redirect(url_for('auth_routes.login'))

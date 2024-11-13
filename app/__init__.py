@@ -6,8 +6,15 @@ from user.query import find_user_by_id
 from db import db
 import redis
 import os
+import logging
+import sys
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 def create_app():
+    logger.info("Initializing App")
+
     app = Flask(__name__)
 
     # #Register blueprints
@@ -46,5 +53,7 @@ def create_app():
     # Initialize the Flask-Session extension
     Session(app)
 
+    logger.info("Successfully Initializing App")
+    
     return app
 

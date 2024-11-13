@@ -19,6 +19,7 @@ dist/
 build/
 *.whl
 .env
+*.log
 
 # PyInstaller
 #  Usually these files are written by a Python script from a template
@@ -27,3 +28,4 @@ build/
 
 # SqlAlchemy autogen
 instance/
+
